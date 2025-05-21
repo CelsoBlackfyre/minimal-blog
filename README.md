@@ -1,68 +1,73 @@
-# Astro Starter Kit: Blog
+Codex Blackfyre – Content Aggregator & Blog
 
-```sh
-npm create astro@latest -- --template blog
-```
+A dark, unique, and feature-rich blog built on Astro, designed to keep you up to date with the latest movies, series, games, and comics.
+Includes original reviews, tech posts, and a personalized, lore-rich interface themed after House Blackfyre.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/blog)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/blog)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/blog/devcontainer.json)
+<!-- Replace with actual screenshot if desired -->
+✨ Features
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+    🔥 Content Aggregation: Automatically fetches and displays the latest movies (via TMDB), popular TV shows, and more.
 
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+    🧙 Original Lore & Theming: Unique Blackfyre sigil, color palette, and world-building flourishes.
 
-Features:
+    🎨 Minimal & Immersive UI: Custom backgrounds, card layouts, and seamless experience.
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+    📰 MDX/Markdown Blogging: Write posts with images, code, or media embeds.
 
-## 🚀 Project Structure
+    ⚡ Performance: Blazing fast, SEO-friendly, and responsive.
 
-Inside of your Astro project, you'll see the following folders and files:
+    🌐 OpenGraph, RSS, Sitemap: Ready for search engines and sharing.
 
-```text
+🗂️ Project Structure
+
 ├── public/
+│   └── dragon-sigil.png      # Your custom Blackfyre sigil
 ├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
+│   ├── components/           # Astro components (cards, lists, header, etc)
+│   ├── content/              # Blog posts and MDX collections
+│   ├── layouts/              # Page & post layouts
+│   └── pages/                # Routes
 ├── astro.config.mjs
-├── README.md
 ├── package.json
 └── tsconfig.json
-```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+    /components/: UI blocks (movie cards, headers, footers, etc.)
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+    /content/: Markdown/MDX posts (with optional categories for "Movies", "TV Shows", etc.)
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+    /public/: Static assets (images, SVGs, favicon, etc.)
 
-Any static assets, like images, can be placed in the `public/` directory.
+🚀 Usage
 
-## 🧞 Commands
+npm install
+npm run dev
 
-All commands are run from the root of the project, from a terminal:
+Open your browser at localhost:4321.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+    To add a new blog post, create a .md or .mdx file in src/content/blog/.
 
-## 👀 Want to learn more?
+    Latest movies/series/games are pulled dynamically via API.
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+    Edit global styling in src/styles/global.css.
 
-## Credit
+🛠️ Customization
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+    Update the site theme or sigil in /public/dragon-sigil.png.
+
+    Adjust background patterns and color scheme in global.css.
+
+    Movie and TV data are fetched via TMDB—add your API key in environment variables.
+
+🧞 Useful Commands
+Command	Action
+npm install	Install dependencies
+npm run dev	Start local dev server
+npm run build	Build production site to ./dist/
+npm run preview	Preview build locally before deploying
+🤝 Contributing
+
+PRs and suggestions are welcome!
+You can use this as your own template for a modern media blog or aggregator.
+Built with Astro + Custom Code by Imperator Blackfyre
+
+Credit for original Astro theme: Bear Blog.
