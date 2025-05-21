@@ -20,6 +20,7 @@ const blog = defineCollection({
       "General",
       "Sports",
       "Music",
+      "Comics",
     ]),
   }),
 });

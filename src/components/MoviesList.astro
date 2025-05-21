@@ -1,0 +1,91 @@
+---
+import { getMovies } from "../utils/fetch-movies";
+const movies = await getMovies();
+---
+
+<div class="movies-wall">
+  {movies.map((movie) => (
+    <div class="movie-card">
+      <img src={"https://image.tmdb.org/t/p/w500" + movie.poster_path} alt={movie.title} />
+      <div class="movie-info">
+        <h3>{movie.title}</h3>
+        <a href={"https://www.themoviedb.org/movie/" + movie.id} target="_blank" rel="noopener noreferrer">
+          View Movie →
+        </a>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+.movies-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.movie-card {
+  background: rgba(20, 10, 10, 0.86);
+  border-radius: 18px;
+  box-shadow: 0 6px 32px 0 rgba(80,10,20,0.15), 0 1.5px 10px 0 rgba(127,29,29,0.11) inset;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.16s cubic-bezier(.28,.84,.42,1);
+  border: 1.5px solid rgba(127,29,29,0.14);
+}
+.movie-card:hover {
+  transform: translateY(-8px) scale(1.035);
+  box-shadow: 0 10px 40px 0 #7f1d1d44, 0 1.5px 18px 0 #7f1d1d22 inset;
+  border-color: #7f1d1d44;
+}
+
+.movie-card img {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 16px 16px 0 0;
+  transition: filter 0.2s;
+  filter: grayscale(10%) contrast(1.1);
+  box-shadow: 0 2px 12px #000a;
+}
+.movie-card:hover img {
+  filter: grayscale(0) contrast(1.1) brightness(1.07) drop-shadow(0 0 12px #7f1d1d55);
+}
+
+.movie-info {
+  padding: 1.2rem 1rem 1rem 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.movie-info h3 {
+  margin: 0 0 0.5em 0;
+  font-size: 1.08rem;
+  color: #f8fafc;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 12px #2e010166;
+}
+
+.movie-info a {
+  margin-top: 0.4em;
+  color: #f87171;
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color 0.17s;
+}
+
+.movie-info a:hover {
+  color: #e11d48;
+  text-shadow: 0 0 6px #f871713a;
+}
+</style>

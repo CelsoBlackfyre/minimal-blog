@@ -4,4 +4,4 @@
 export const SITE_TITLE = "Blackfyre Codex";
 export const SITE_DESCRIPTION =
   "Welcome to the Blackfyre Codex, where you get info about the Blackfyre Legion and more!";
-export const POST_CATEGORY = ["Games", "Animes", "Movies", "TV Shows"] as const;
+export const POST_CATEGORY = ["Games", "Animes", "Movies", "TV Shows", "Comics", "General", "Sports", "Music"] as const;

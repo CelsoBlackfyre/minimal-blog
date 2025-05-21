@@ -1,0 +1,13 @@
+---
+import ComicsList from '../components/ComicsList.astro';
+import { getComics } from '../utils/fetch-comics';
+
+const comics = await getComics();
+---
+
+<html>
+  <body>
+    <h1>🦸 Latest Comics</h1>
+    <ComicsList comics={comics} />
+  </body>
+</html>

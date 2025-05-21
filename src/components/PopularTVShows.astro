@@ -1,0 +1,61 @@
+---
+import { getTVShows } from "../utils/fetch-tvshows";
+const tvshows = await getTVShows();
+const popularTVShows = tvshows.slice(0,6);
+---
+
+<div class="latest-popularTVShows-row">
+    <h2>Popular TV Shows</h2>
+    <div class="popularTVShows-cards-row">
+       {popularTVShows.map((tvshow) => (
+        <div class="popularTVShows-card">
+            <img src={"https://image.tmdb.org/t/p/w500" + tvshow.poster_path} alt={tvshow.name} />
+            <h2>{tvshow.name}</h2>
+            <a href={"https://www.themoviedb.org/tv/" + tvshow.id} target="_blank">View TV Show →</a>
+        </div>
+       ))}
+    </div>
+</div>
+
+<style>
+    .latest-popularTVShows-row {
+        margin-bottom: 2em;
+    }
+    .latest-popularTVShows-row h2 {
+        text-align: center;
+    }
+    .popularTVShows-cards-row {
+        display: flex;
+        gap: 1em;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+    .popularTVShows-card {
+        flex-direction: column;
+        min-width: 150px;
+        background: #1e1e1e;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 5%);
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color:inherit;
+        transition: all 0.12s;
+    }
+    .popularTVShows-card:hover {
+        transform: translateY(-4px) scale(1.04);
+    }
+    .popularTVShows-card img {
+        width: 100%;
+        height: 225px;
+        object-fit: cover;
+    }
+    .popularTVShows-card h2 {
+        font-size: 1rem;
+        padding: 0.5rem;
+        font-weight: bold;
+        text-align: center;
+        min-height: 2.4em;    
+    }
+</style>

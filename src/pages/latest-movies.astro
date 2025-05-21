@@ -1,0 +1,11 @@
+---
+import MoviesList from "../components/MoviesList.astro";
+import { getMovies } from "../utils/fetch-movies";
+import Layout from "../layouts/BlogPost.astro";
+
+const movies = await getMovies();
+---
+
+<Layout title="Latest Movies" description="Latest movies from TMDB" pubDate={new Date()} category="Movies">
+    <MoviesList movies={movies} />
+</Layout>
