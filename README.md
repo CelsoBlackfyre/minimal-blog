@@ -37,10 +37,68 @@ Includes original reviews, tech posts, and a personalized, lore-rich interface t
 
     /public/: Static assets (images, SVGs, favicon, etc.)
 
-🚀 Usage
+## 🚀 Getting Started
 
+### Local Development
+
+```bash
+# Install dependencies
 npm install
+
+# Start development server
 npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## ☁️ Vercel Deployment
+
+### Prerequisites
+- A Vercel account (free tier available)
+- Your project pushed to a GitHub, GitLab, or Bitbucket repository
+- Your Go backend API deployed (e.g., on Railway, Render, or Vercel Serverless Functions)
+
+### Deployment Steps
+
+1. **Prepare Your Repository**
+   - Make sure all changes are committed and pushed to your repository
+   - Note: Your Astro project should be in the `src` directory
+
+2. **Deploy to Vercel**
+   - Go to [Vercel](https://vercel.com/new)
+   - Click "Import Project" and select your repository
+   - In the configuration:
+     - Set the root directory to `/src`
+     - Set the build command: `npm install && npm run build`
+     - Set the output directory: `dist`
+     - Set the Node.js version: 18.x
+   
+3. **Configure Environment Variables**
+   In your Vercel project settings, add these environment variables:
+   ```
+   NODE_ENV=production
+   PUBLIC_API_URL=your-backend-api-url.com
+   SITE_URL=https://your-vercel-app.vercel.app
+   ```
+
+4. **Deploy!**
+   - Click "Deploy" and wait for the deployment to complete
+   - Your site will be live at `your-project-name.vercel.app`
+
+### Custom Domain (Optional)
+1. Go to your Vercel project settings
+2. Click on "Domains"
+3. Add your custom domain and follow the verification steps
+
+### Backend Deployment
+For the Go backend, consider deploying to:
+- [Railway.app](https://railway.app/) (recommended for Go)
+- [Render.com](https://render.com/)
+- Vercel Serverless Functions (if you convert your Go code to a serverless function)
 
 Open your browser at localhost:4321.
 
