@@ -23,87 +23,105 @@ const corsHeaders: Record<string, string> = {
 const createResponse = (data: any, status = 200, headers: Record<string, string> = {}) => {
   return new Response(JSON.stringify(data), {
     status,
-    headers: {
-      'Content-Type': 'application/json',
-      ...corsHeaders,
-      ...headers,
-    },
+    headers: { ...corsHeaders, ...headers },
   });
 };
 
-// Handle GET requests
+// TMDB API configuration
+const TMDB_API_KEY = import.meta.env.TMDB_API_KEY || process.env.TMDB_API_KEY;
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+
+// Cache configuration
+const CACHE_TTL = 60 * 60; // 1 hour in seconds
+
+// Fetch movies from TMDB API
 export const get: APIRoute = async ({ request }) => {
   try {
-    console.log('API Route: Request received');
-    
-    // Direct API key for TMDB (this is a public key)
-    const apiKey = '3e3166a36a2077f3e58c3efe7058f9ee';
-    
-    // Get query parameters
-    const searchParams = new URL(request.url).searchParams;
-    const page = searchParams.get('page') || '1';
-    const genre = searchParams.get('with_genres') || '';
-    const sortBy = searchParams.get('sort_by') || 'popularity.desc';
+    if (!TMDB_API_KEY) {
+      throw new Error('TMDB API key is not configured');
+    }
 
-    console.log('Fetching movies with params:', { page, genre, sortBy });
+    const url = new URL(request.url);
+    const page = url.searchParams.get('page') || '1';
+    const genre = url.searchParams.get('with_genres') || '';
+    const sortBy = url.searchParams.get('sort_by') || 'popularity.desc';
 
-    // Build the TMDB API URL
-    const tmdbUrl = new URL('https://api.themoviedb.org/3/discover/movie');
-    tmdbUrl.searchParams.append('api_key', apiKey);
-    tmdbUrl.searchParams.append('language', 'en-US');
-    tmdbUrl.searchParams.append('sort_by', sortBy);
-    tmdbUrl.searchParams.append('page', page);
+    // Build TMDB API URL
+    const apiUrl = new URL(`${TMDB_BASE_URL}/discover/movie`);
+    apiUrl.searchParams.append('api_key', TMDB_API_KEY);
+    apiUrl.searchParams.append('language', 'en-US');
+    apiUrl.searchParams.append('page', page);
+    apiUrl.searchParams.append('sort_by', sortBy);
     
     if (genre) {
-      tmdbUrl.searchParams.append('with_genres', genre);
+      apiUrl.searchParams.append('with_genres', genre);
     }
-
-    console.log('TMDB API URL:', tmdbUrl.toString());
 
     // Make request to TMDB API
-    const response = await fetch(tmdbUrl.toString());
-    const data = await response.json();
+    const response = await fetch(apiUrl.toString());
     
     if (!response.ok) {
-      console.error('TMDB API Error:', response.status, data);
-      return createResponse(
-        { error: 'Failed to fetch from TMDB API', details: data },
-        502
-      );
+      const errorData = await response.json();
+      console.error('TMDB API Error:', errorData);
+      throw new Error(`TMDB API error: ${response.statusText}`);
     }
-    
-    // Transform the response to match our frontend expectations
-    const movies: Movie[] = data.results.map((movie: any) => ({
-      title: movie.title,
-      id: movie.id,
-      poster_path: movie.poster_path,
-      release_date: movie.release_date,
-      vote_average: movie.vote_average,
-      overview: movie.overview
-    }));
 
-    return createResponse({
-      results: movies,
-      page: data.page,
-      total_pages: data.total_pages,
-      total_results: data.total_results
+    const data = await response.json();
+
+    // Transform the response to match our frontend expectations
+    const movies = {
+      ...data,
+      results: data.results.map((movie: any) => ({
+        id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path,
+        overview: movie.overview,
+        release_date: movie.release_date,
+        vote_average: movie.vote_average,
+      }))
+    };
+
+    return new Response(JSON.stringify(movies), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': `public, max-age=${CACHE_TTL}, s-maxage=${CACHE_TTL}, stale-while-revalidate=60`,
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      }
     });
   } catch (error) {
-    console.error('Error in movies API route:', error);
-    return createResponse(
-      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
-      500
+    console.error('Error fetching movies:', error);
+    return new Response(
+      JSON.stringify({ 
+        error: 'Failed to fetch movies',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-store, no-cache, must-revalidate',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        }
+      }
     );
   }
 };
 
-// Export the GET handler
-export const GET = get;
-
-// Handle OPTIONS for CORS preflight
-export const OPTIONS = () => {
+// Handle OPTIONS requests for CORS preflight
+export const options: APIRoute = () => {
   return new Response(null, {
     status: 204,
-    headers: corsHeaders
+    headers: {
+      'Allow': 'GET, OPTIONS, HEAD',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Cache-Control': 'no-store, no-cache, must-revalidate'
+    },
   });
 };

@@ -7,6 +7,11 @@ build/
 .cache/
 .turbo/
 
+# Environment variables
+.env
+.env.*
+!.env.example
+
 # Generated types
 .astro/
 .vercel/
@@ -25,12 +30,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-*.sublime-*
 
 # System Files
 .DS_Store
@@ -38,7 +37,7 @@ Thumbs.db
 
 # Cache files
 .npm
-.eslintcache
+eslintcache
 .stylelintcache
 .cache/
 .parcel-cache/
@@ -51,6 +50,15 @@ coverage/
 .tmp/
 .temp/
 temp/
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 # Local development files
 .local-*

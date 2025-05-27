@@ -1,7 +1,8 @@
 ---
 import { getMovies } from "../utils/fetch-movies";
-const moviesResponse = await getMovies();
-const recentMovies = moviesResponse.results.slice(0, 6);
+
+// Fetch movies on the server side
+const recentMovies = (await getMovies()).results.slice(0, 6);
 ---
 
 <div class="latest-movies-row">
@@ -9,7 +10,19 @@ const recentMovies = moviesResponse.results.slice(0, 6);
     <div class="movie-cards-row">
        {recentMovies.map((movie) => (
         <div class="movie-card">
-            <img src={"https://image.tmdb.org/t/p/w500" + movie.poster_path} alt={movie.title} />
+            {movie.poster_path ? (
+              <img 
+                src={"https://image.tmdb.org/t/p/w300" + movie.poster_path} 
+                alt={movie.title}
+                loading="lazy"
+                width="150"
+                height="225"
+              />
+            ) : (
+              <div class="placeholder-poster">
+                <span>{movie.title}</span>
+              </div>
+            )}
             <h3>{movie.title}</h3>
             {movie.vote_average && (
               <div class="rating">
@@ -43,12 +56,25 @@ const recentMovies = moviesResponse.results.slice(0, 6);
         padding-bottom: 0.5rem;
     }
     .movie-card {
+        display: flex;
         flex-direction: column;
         min-width: 150px;
+        max-width: 180px;
         background: #1e1e1e;
         border-radius: 1rem;
         overflow: hidden;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 5%);
+        .placeholder-poster {
+          aspect-ratio: 2/3;
+          background: #2d2d2d;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 1rem;
+          color: #888;
+          font-size: 0.9rem;
+        }
         display: flex;
         align-items: center;
         text-decoration: none;
