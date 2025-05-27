@@ -1,43 +1,88 @@
 ---
+import type { Movie } from "../utils/fetch-movies";
 import { getMovies } from "../utils/fetch-movies";
-const movies = await getMovies();
+
+const moviesResponse = await getMovies();
+const movies: Movie[] = moviesResponse.results;
 ---
 
 <div class="movies-wall">
-  {movies.map((movie) => (
-    <div class="movie-card">
-      <img src={"https://image.tmdb.org/t/p/w500" + movie.poster_path} alt={movie.title} />
-      <div class="movie-info">
-        <h3>{movie.title}</h3>
-        <a href={"https://www.themoviedb.org/movie/" + movie.id} target="_blank" rel="noopener noreferrer">
-          View Movie →
-        </a>
+  {movies.length > 0 ? (
+    movies.map((movie) => (
+      <div class="movie-card">
+        {movie.poster_path && (
+          <img 
+            src={"https://image.tmdb.org/t/p/w500" + movie.poster_path} 
+            alt={movie.title}
+            loading="lazy"
+          />
+        )}
+        <div class="movie-info">
+          <h3>{movie.title}</h3>
+          {movie.release_date && (
+            <p class="release-date">{new Date(movie.release_date).getFullYear()}</p>
+          )}
+          {movie.vote_average && (
+            <div class="rating">
+              ⭐ {movie.vote_average.toFixed(1)}/10
+            </div>
+          )}
+          <a 
+            href={"https://www.themoviedb.org/movie/" + movie.id} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="view-movie"
+          >
+            View Details →
+          </a>
+        </div>
       </div>
+    ))
+  ) : (
+    <div class="no-movies">
+      <p>No movies found. Please try again later.</p>
     </div>
-  ))}
+  )}
 </div>
 
 <style>
 .movies-wall {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 2rem;
-  padding: 2rem 0;
+  padding: 2rem 1.5rem;
   width: 100%;
-  max-width: 1300px;
+  max-width: 1440px;
   margin: 0 auto;
+  justify-items: center;
+}
+
+.no-movies {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #888;
+  font-size: 1.1rem;
 }
 
 .movie-card {
   background: rgba(20, 10, 10, 0.86);
-  border-radius: 18px;
+  border-radius: 12px;
   box-shadow: 0 6px 32px 0 rgba(80,10,20,0.15), 0 1.5px 10px 0 rgba(127,29,29,0.11) inset;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  transition: transform 0.16s cubic-bezier(.28,.84,.42,1);
-  border: 1.5px solid rgba(127,29,29,0.14);
+  width: 100%;
+  max-width: 280px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(127,29,29,0.2);
+  height: 100%;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    border-color: rgba(127, 29, 29, 0.4);
+  }
 }
 .movie-card:hover {
   transform: translateY(-8px) scale(1.035);
@@ -47,8 +92,10 @@ const movies = await getMovies();
 
 .movie-card img {
   width: 100%;
-  aspect-ratio: 2/3;
+  height: 330px;
   object-fit: cover;
+  display: block;
+  background: #1a1a1a;
   border-radius: 16px 16px 0 0;
   transition: filter 0.2s;
   filter: grayscale(10%) contrast(1.1);
@@ -59,33 +106,76 @@ const movies = await getMovies();
 }
 
 .movie-info {
-  padding: 1.2rem 1rem 1rem 1rem;
-  width: 100%;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  flex-grow: 1;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .movie-info h3 {
-  margin: 0 0 0.5em 0;
-  font-size: 1.08rem;
-  color: #f8fafc;
-  letter-spacing: 0.02em;
-  text-shadow: 0 1px 12px #2e010166;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #f0f0f0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 3em;
 }
 
-.movie-info a {
-  margin-top: 0.4em;
-  color: #f87171;
-  text-decoration: none;
-  font-size: 1em;
+.release-date {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  width: fit-content;
   font-weight: 500;
-  letter-spacing: 0.02em;
-  transition: color 0.17s;
 }
 
-.movie-info a:hover {
-  color: #e11d48;
-  text-shadow: 0 0 6px #f871713a;
+.rating svg {
+  margin-right: 0.25rem;
+}
+
+.movie-info .view-movie {
+  color: #ff4d4d;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 77, 77, 0.2);
+  transition: color 0.2s ease;
+}
+
+.movie-info .view-movie:hover {
+  color: #ff6b6b;
+  text-decoration: none;
+}
+
+.movie-info .view-movie::after {
+  content: '→';
+  margin-left: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.movie-info .view-movie:hover::after {
+  transform: translateX(3px);
 }
 </style>
