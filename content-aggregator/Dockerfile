@@ -1,30 +1,40 @@
-# Build stage
+# Check if Dockerfile exists
+if [ ! -f Dockerfile ]; then
+  cat > Dockerfile << 'EOF'
+# Use the official Golang image
 FROM golang:1.21-alpine AS builder
+
+# Set the working directory
 WORKDIR /app
 
-# Download dependencies
+# Copy go mod and sum files
 COPY go.mod go.sum ./
+
+# Download all dependencies
 RUN go mod download
 
-# Copy source code
+# Copy the source code
 COPY . .
 
-
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -o aggregator
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd
 
-# Final stage
+# Use a minimal alpine image
 FROM alpine:latest
-WORKDIR /app
+
+# Install CA certificates
+RUN apk --no-cache add ca-certificates
+
+# Set the working directory
+WORKDIR /root/
 
 # Copy the binary from builder
-COPY --from=builder /app/aggregator .
+COPY --from=builder /app/main .
 
-# Copy any necessary files (configs, templates, etc.)
-# COPY --from=builder /app/configs ./configs
-
-# Expose port
+# Expose the port your app runs on
 EXPOSE 8080
 
-# Run the binary
-CMD ["./aggregator"]
+# Command to run the executable
+CMD ["./main"]
+EOF
+fi
