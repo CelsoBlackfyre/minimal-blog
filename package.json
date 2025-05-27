@@ -13,11 +13,11 @@
     "vercel-build": "npm install && npm run build"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.2.6",
+    "@astrojs/mdx": "^4.3.0",
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.4.0",
     "@astrojs/vercel": "^8.1.4",
-    "astro": "^5.7.13"
+    "astro": "^5.8.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
