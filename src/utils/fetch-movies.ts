@@ -68,7 +68,7 @@ export async function getMovies() {
     
     // At runtime, fetch from the API
     try {
-        const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:8080/api/movies';
+        const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:4321/api/movies';
         const res = await fetch(apiUrl);
         if (!res.ok) {
             console.error('Failed to fetch movies:', res.statusText);
