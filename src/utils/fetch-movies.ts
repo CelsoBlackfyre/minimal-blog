@@ -15,6 +15,9 @@ export interface MoviesResponse {
   total_results: number;
 }
 
+// Base URL for TMDB API
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+
 // Helper function to get the base URL based on the environment
 function getBaseUrl() {
   // Client-side: use relative URL
@@ -47,45 +50,48 @@ function getApiKey() {
 
 export async function getMovies(page: number = 1, genre?: string): Promise<MoviesResponse> {
   try {
-    // Build the endpoint with query parameters
-    const params = new URLSearchParams();
-    params.set('page', page.toString());
+    const apiKey = getApiKey();
+    if (!apiKey) {
+      throw new Error('TMDB API key is not configured');
+    }
+
+    // Build the TMDB API URL
+    const params = new URLSearchParams({
+      api_key: apiKey,
+      language: 'en-US',
+      page: page.toString(),
+      sort_by: 'popularity.desc',
+      include_adult: 'false',
+      include_video: 'false'
+    });
+    
     if (genre) params.set('with_genres', genre);
     
-    const endpoint = `/api/movies?${params.toString()}`;
-    const baseUrl = getBaseUrl();
-    const fetchUrl = `${baseUrl}${endpoint}`;
+    const url = `${TMDB_BASE_URL}/movie/now_playing?${params.toString()}`;
     
-    console.log('Fetching movies from:', fetchUrl);
+    console.log('Fetching movies from TMDB API:', url);
     
-    const response = await fetch(fetchUrl, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(url);
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Failed to fetch movies:', {
+      console.error('Failed to fetch movies from TMDB:', {
         status: response.status,
         statusText: response.statusText,
-        url: fetchUrl,
         error: errorText
       });
-      throw new Error(`Failed to fetch movies: ${response.status} ${response.statusText}`);
+      throw new Error(`TMDB API error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
-    // Ensure the response matches our MoviesResponse interface
-    if (Array.isArray(data)) {
-      return {
-        results: data,
-        page: 1,
-        total_pages: 1,
-        total_results: data.length
-      };
-    }
-    return data;
+    
+    // Transform TMDB response to our MoviesResponse interface
+    return {
+      results: data.results || [],
+      page: data.page || 1,
+      total_pages: data.total_pages || 1,
+      total_results: data.total_results || 0
+    };
   } catch (error) {
     console.error('Error fetching movies:', error);
     return {
