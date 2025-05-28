@@ -13,7 +13,7 @@ export default defineConfig({
   integrations: [mdx(), sitemap()],
   
   // Use static output for Vercel
-  output: 'static',
+  output: 'server',
   adapter: vercel({
     webAnalytics: {
       enabled: true,
