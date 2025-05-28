@@ -25,14 +25,23 @@ export async function getMovies(page: number = 1, genre?: string): Promise<Movie
   }
   
   try {
-    const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:4321/api/movies';
-    const url = new URL(apiUrl);
+    // Use relative URL in production, full URL in development
+    const baseUrl = import.meta.env.DEV 
+      ? import.meta.env.PUBLIC_API_URL || 'http://localhost:4321'
+      : '';
+      
+    const endpoint = '/api/movies';
+    const url = new URL(endpoint, baseUrl);
     
     // Set query parameters
     if (page > 1) url.searchParams.set('page', page.toString());
     if (genre) url.searchParams.set('with_genres', genre);
     
-    const response = await fetch(url.toString());
+    const response = await fetch(url.toString(), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
