@@ -17,12 +17,36 @@ export const GET: APIRoute = async ({ request }) => {
       });
     }
 
-    // Verify API key is configured
-    const apiKey = import.meta.env.TMDB_API_KEY || process.env.TMDB_API_KEY;
+    // Get API key with fallbacks
+    const apiKey = (
+      import.meta.env.TMDB_API_KEY ||
+      process.env.TMDB_API_KEY ||
+      process.env.NEXT_PUBLIC_TMDB_API_KEY ||
+      import.meta.env.PUBLIC_TMDB_API_KEY
+    );
+
+    // Debug log (remove in production)
+    console.log('API Key Status:', {
+      hasApiKey: !!apiKey,
+      keyLength: apiKey ? apiKey.length : 0,
+      env: process.env.NODE_ENV,
+      isVercel: !!process.env.VERCEL,
+      vercelEnv: process.env.VERCEL_ENV
+    });
+
     if (!apiKey) {
-      console.error('TMDB_API_KEY is not configured');
+      const errorMsg = 'TMDB API key is not properly configured';
+      console.error(errorMsg, {
+        availableEnvVars: Object.keys(process.env).filter(k => k.includes('TMDB') || k.includes('VERCEL')),
+        importMetaEnv: Object.keys(import.meta.env)
+      });
+      
       return new Response(
-        JSON.stringify({ error: 'Server configuration error' }),
+        JSON.stringify({ 
+          error: 'Configuration Error',
+          message: errorMsg,
+          help: 'Please ensure TMDB_API_KEY is set in your environment variables'
+        }),
         { 
           status: 500, 
           headers: { 

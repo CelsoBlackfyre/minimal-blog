@@ -26,8 +26,23 @@ function getBaseUrl() {
     return `https://${process.env.VERCEL_URL}`;
   }
   
+  // Check for custom PUBLIC_API_URL
+  const publicApiUrl = process.env.PUBLIC_API_URL || import.meta.env.PUBLIC_API_URL;
+  if (publicApiUrl) return publicApiUrl;
+  
   // Fallback for local development
   return 'http://localhost:4321';
+}
+
+// Helper to get API key with fallbacks
+function getApiKey() {
+  // Try different ways to get the API key
+  return (
+    process.env.TMDB_API_KEY || // Vercel environment
+    import.meta.env.TMDB_API_KEY || // Vite environment
+    process.env.NEXT_PUBLIC_TMDB_API_KEY || // Common Next.js pattern
+    import.meta.env.PUBLIC_TMDB_API_KEY // Vite public env var
+  );
 }
 
 export async function getMovies(page: number = 1, genre?: string): Promise<MoviesResponse> {

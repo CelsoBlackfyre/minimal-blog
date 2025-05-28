@@ -24,6 +24,14 @@ export default defineConfig({
   server: {
     port: 4321,
     host: true,
+    // Ensure environment variables are available in development
+    setup: (server) => {
+      if (!process.env.TMDB_API_KEY) {
+        console.warn('TMDB_API_KEY is not set in environment variables');
+        // Try to load from .env file in development
+        require('dotenv').config();
+      }
+    },
   },
   
   vite: {
