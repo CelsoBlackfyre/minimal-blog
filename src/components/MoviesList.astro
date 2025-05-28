@@ -1,5 +1,4 @@
 ---
-// Movie fetching is currently disabled
 const isDisabled = true;
 const message = 'The movie database feature is currently unavailable.';
 ---
@@ -18,118 +17,13 @@ const message = 'The movie database feature is currently unavailable.';
     margin: 2rem auto;
     padding: 0 1rem;
   }
-  
   .notice {
-    background: #f8f9fa;
+    background: #1a1a1a;
     border-left: 4px solid #ffc107;
     padding: 2rem;
     border-radius: 4px;
     text-align: center;
+    color: #fff;
+    box-shadow: 0 4px 24px #7f1d1d22;
   }
-  width: 100%;
-  max-width: 280px;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(127,29,29,0.2);
-  height: 100%;
-  
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-    border-color: rgba(127, 29, 29, 0.4);
-  }
-}
-.movie-card:hover {
-  transform: translateY(-8px) scale(1.035);
-  box-shadow: 0 10px 40px 0 #7f1d1d44, 0 1.5px 18px 0 #7f1d1d22 inset;
-  border-color: #7f1d1d44;
-}
-
-.movie-card img {
-  width: 100%;
-  height: 330px;
-  object-fit: cover;
-  display: block;
-  background: #1a1a1a;
-  border-radius: 16px 16px 0 0;
-  transition: filter 0.2s;
-  filter: grayscale(10%) contrast(1.1);
-  box-shadow: 0 2px 12px #000a;
-}
-.movie-card:hover img {
-  filter: grayscale(0) contrast(1.1) brightness(1.07) drop-shadow(0 0 12px #7f1d1d55);
-}
-
-.movie-info {
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.movie-info h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  line-height: 1.3;
-  color: #f0f0f0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-height: 3em;
-}
-
-.release-date {
-  color: #aaa;
-  font-size: 0.9rem;
-  margin: 0 0 0.5rem 0;
-}
-
-.rating {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(255, 215, 0, 0.15);
-  color: #ffd700;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  margin-bottom: 1rem;
-  width: fit-content;
-  font-weight: 500;
-}
-
-.rating svg {
-  margin-right: 0.25rem;
-}
-
-.movie-info .view-movie {
-  color: #ff4d4d;
-  text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  margin-top: auto;
-  padding-top: 0.75rem;
-  border-top: 1px solid rgba(255, 77, 77, 0.2);
-  transition: color 0.2s ease;
-}
-
-.movie-info .view-movie:hover {
-  color: #ff6b6b;
-  text-decoration: none;
-}
-
-.movie-info .view-movie::after {
-  content: '→';
-  margin-left: 0.5rem;
-  transition: transform 0.2s ease;
-}
-
-.movie-info .view-movie:hover::after {
-  transform: translateX(3px);
-}
 </style>
