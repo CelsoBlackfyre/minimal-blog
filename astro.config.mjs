@@ -13,8 +13,8 @@ export default defineConfig({
   
   integrations: [mdx(), sitemap()],
   
-  // For Vercel deployment with serverless functions
-  output: 'static',
+  // Enable server-side rendering for API routes
+  output: 'server',
   adapter: vercel({
     webAnalytics: {
       enabled: true,

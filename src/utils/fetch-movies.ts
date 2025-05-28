@@ -15,42 +15,35 @@ export interface MoviesResponse {
   total_results: number;
 }
 
-/**
- * Fetches movies from the TMDB API via our API route
- */
 export async function getMovies(page: number = 1, genre?: string): Promise<MoviesResponse> {
-  // During build time, return an empty array
-  if (import.meta.env.SSR) {
-    return { results: [], page: 1, total_pages: 1, total_results: 0 };
-  }
-  
   try {
-    // Use relative URL in production, full URL in development
-    const baseUrl = import.meta.env.DEV 
-      ? import.meta.env.PUBLIC_API_URL || 'http://localhost:4321'
-      : '';
-      
-    const endpoint = '/api/movies';
-    const url = new URL(endpoint, baseUrl);
-    
-    // Set query parameters
-    if (page > 1) url.searchParams.set('page', page.toString());
-    if (genre) url.searchParams.set('with_genres', genre);
-    
-    const response = await fetch(url.toString(), {
+    let endpoint = `/api/movies?page=${page}`;
+    if (genre) endpoint += `&with_genres=${encodeURIComponent(genre)}`;
+
+    let fetchUrl = endpoint;
+
+    // SSR (Node): must use absolute URL
+    if (typeof window === 'undefined') {
+      // On Vercel: prefer process.env.URL or process.env.VERCEL_URL (set this in Vercel Env Vars)
+      const base =
+        process.env.URL ||
+        (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:4321');
+      fetchUrl = base + endpoint;
+    }
+
+    const response = await fetch(fetchUrl, {
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    
+
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
       throw new Error(error.message || 'Failed to fetch movies');
     }
 
     const data = await response.json();
-    
-    // Ensure the response matches the MoviesResponse interface
+    // Enforce MoviesResponse structure
     if (Array.isArray(data)) {
       return {
         results: data,
@@ -59,12 +52,9 @@ export async function getMovies(page: number = 1, genre?: string): Promise<Movie
         total_results: data.length
       };
     }
-    
-    // If it's already in the correct format, return as is
     return data;
   } catch (error) {
     console.error('Error fetching movies:', error);
-    // Return empty results on error to prevent UI breakage
     return {
       results: [],
       page: 1,
@@ -74,9 +64,7 @@ export async function getMovies(page: number = 1, genre?: string): Promise<Movie
   }
 }
 
-/**
- * Fetches a single movie by ID
- */
+
 export async function getMovieById(id: number): Promise<Movie | undefined> {
   try {
     const response = await getMovies();
