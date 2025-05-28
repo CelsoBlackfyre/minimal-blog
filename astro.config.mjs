@@ -6,31 +6,28 @@ import vercel from '@astrojs/vercel/serverless';
 
 // https://astro.build/config
 export default defineConfig({
-  // This will be overridden by the VERCEL_URL environment variable in production
   site: process.env.VERCEL_URL 
     ? `https://${process.env.VERCEL_URL}` 
     : 'http://localhost:4321',
   
   integrations: [mdx(), sitemap()],
   
-  // Enable server-side rendering for API routes
   output: 'server',
   adapter: vercel({
     webAnalytics: {
       enabled: true,
+    },
+    // Enable ISR (Incremental Static Regeneration)
+    isr: {
+      expiration: 60, // 1 minute
     },
   }),
   
   server: {
     port: 4321,
     host: true,
-    // Ensure environment variables are available in development
-    setup: (server) => {
-      if (!process.env.TMDB_API_KEY) {
-        console.warn('TMDB_API_KEY is not set in environment variables');
-        // Try to load from .env file in development
-        require('dotenv').config();
-      }
+    headers: {
+      'Cache-Control': 'public, max-age=300, s-maxage=300',
     },
   },
   

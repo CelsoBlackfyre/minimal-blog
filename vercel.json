@@ -9,17 +9,9 @@
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/(.*)", "dest": "/" }
   ],
-  "build": {
-    "env": {
-      "NODE_VERSION": "18.x"
-    }
-  },
   "env": {
-    "NODE_ENV": "production"
-  },
-  "build": {
-    "env": {
-      "TMDB_API_KEY": "3e3166a36a2077f3e58c3efe7058f9ee"
-    }
+    "NODE_ENV": "production",
+    "NODE_VERSION": "18.x"
+    // DO NOT PUT SECRETS HERE; Use Vercel dashboard for TMDB_API_KEY
   }
 }
