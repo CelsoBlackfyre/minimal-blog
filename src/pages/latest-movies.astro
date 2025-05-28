@@ -1,23 +1,28 @@
-<!-- ---
-import Layout from '../layouts/Layout.astro';
-import MoviesList from '../components/MoviesList.astro';
+---
+import Layout from '../layouts/BlogPost.astro'
+import MoviesList from '../components/MoviesList.astro'
 
 // Fetch movies from our API endpoint
-let movies = [];
+let movies = []
 try {
-  const response = await fetch(new URL('/api/movies', import.meta.url));
+  const response = await fetch(new URL('/api/movies', import.meta.url))
   if (response.ok) {
-    const data = await response.json();
-    movies = data.results || [];
+    const data = await response.json()
+    movies = data.results || []
   }
 } catch (error) {
-  console.error('Failed to fetch movies:', error);
+  console.error('Failed to fetch movies:', error)
 }
 ---
 
-<Layout title="Latest Movies" description="Latest movies from TMDB" pubDate={new Date()} category="Movies">
+<Layout
+  title="Latest Movies"
+  description="Latest movies from TMDB"
+  pubDate={new Date()}
+  category="Movies"
+>
   <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">Latest Movies</h1>
     <MoviesList movies={movies} />
   </div>
-</Layout> -->
+</Layout>
