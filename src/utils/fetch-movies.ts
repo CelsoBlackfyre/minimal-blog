@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 export interface Movie {
   id: number;
   title: string;
@@ -20,13 +19,20 @@ export interface MoviesResponse {
  * Fetches movies from the TMDB API via our API route
  */
 export async function getMovies(page: number = 1, genre?: string): Promise<MoviesResponse> {
+  // During build time, return an empty array
+  if (import.meta.env.SSR) {
+    return { results: [], page: 1, total_pages: 1, total_results: 0 };
+  }
+  
   try {
-    const params = new URLSearchParams({
-      page: page.toString(),
-      ...(genre && { with_genres: genre })
-    });
-
-    const response = await fetch(`/api/movies?${params}`);
+    const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:4321/api/movies';
+    const url = new URL(apiUrl);
+    
+    // Set query parameters
+    if (page > 1) url.searchParams.set('page', page.toString());
+    if (genre) url.searchParams.set('with_genres', genre);
+    
+    const response = await fetch(url.toString());
     
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
@@ -58,27 +64,4 @@ export async function getMovieById(id: number): Promise<Movie | undefined> {
     console.error(`Error fetching movie ${id}:`, error);
     return undefined;
   }
-=======
-// Use environment variable for the API URL with fallback to empty array in static generation
-export async function getMovies() {
-    // During build time, return an empty array
-    if (import.meta.env.SSR) {
-        return [];
-    }
-    
-    // At runtime, fetch from the API
-    try {
-        const apiUrl = import.meta.env.PUBLIC_API_URL || 'http://localhost:4321/api/movies';
-        const res = await fetch(apiUrl);
-        if (!res.ok) {
-            console.error('Failed to fetch movies:', res.statusText);
-            return [];
-        }
-        const data = await res.json();
-        return Array.isArray(data) ? data : [];
-    } catch (error) {
-        console.error('Error fetching movies:', error);
-        return [];
-    }
->>>>>>> origin/master
 }
