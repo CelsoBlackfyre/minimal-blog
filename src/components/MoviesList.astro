@@ -1,232 +1,31 @@
 ---
-import type { Movie, MoviesResponse } from '../utils/fetch-movies';
-import { getMovies } from '../utils/fetch-movies';
-
-// Get initial data at build time
-let initialData: MoviesResponse;
-let error: string | null = null;
-let isLoading = true;
-
-try {
-  initialData = await getMovies();
-} catch (err) {
-  console.error('Error fetching initial movies:', err);
-  error = err instanceof Error ? err.message : 'Failed to load movies';
-} finally {
-  isLoading = false;
-}
-
-const initialMovies = initialData?.results || [];
+// Movie fetching is currently disabled
+const isDisabled = true;
+const message = 'The movie database feature is currently unavailable.';
 ---
 
 <div id="movies-container">
-  {isLoading ? (
-    <div id="loading" class="loading-state">
-      <div class="spinner"></div>
-      <p>Loading movies, please wait...</p>
-    </div>
-  ) : error ? (
-    <div id="error" class="error-state">
-      <p>⚠️ {error}</p>
-      <p>Please try refreshing the page or contact support if the issue persists.</p>
-    </div>
-  ) : initialMovies.length === 0 ? (
-    <div id="no-movies" class="empty-state">
-      <p>No movies available at the moment. Please check back later.</p>
-    </div>
-  ) : (
-    <div id="movies-wall" class="movies-wall">
-      {initialMovies.map((movie) => (
-        <div class="movie-card">
-          {movie.poster_path ? (
-            <img 
-              src={"https://image.tmdb.org/t/p/w500" + movie.poster_path} 
-              alt={movie.title} 
-              loading="lazy"
-              width="300"
-              height="450"
-              onError={(e) => {
-                // Fallback to a placeholder if image fails to load
-                e.currentTarget.src = 'https://via.placeholder.com/300x450?text=No+Poster';
-              }}
-            />
-          ) : (
-            <div class="no-poster">
-              <span>No poster available</span>
-            </div>
-          )}
-          <div class="movie-info">
-            <h3>{movie.title}</h3>
-            {movie.vote_average ? (
-              <div class="rating">
-                ⭐ {movie.vote_average.toFixed(1)}/10
-              </div>
-            ) : null}
-            <a 
-              href={"https://www.themoviedb.org/movie/" + movie.id} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              class="view-movie"
-            >
-              View Details →
-            </a>
-          </div>
-        </div>
-      ))}
-    </div>
-  )}
+  <div class="notice">
+    <h2>Feature Temporarily Unavailable</h2>
+    <p>{message}</p>
+    <p>We apologize for the inconvenience. Please check back later for updates.</p>
+  </div>
 </div>
 
 <style>
-  .loading-state,
-  .error-state,
-  .empty-state {
-    text-align: center;
+  #movies-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  .notice {
+    background: #f8f9fa;
+    border-left: 4px solid #ffc107;
     padding: 2rem;
-    margin: 2rem 0;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    text-align: center;
   }
-
-  .loading-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s ease-in-out infinite;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .no-poster {
-    width: 300px;
-    height: 450px;
-    background: #1a1a1a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-  }
-</style>
-
-<script>
-  // Client-side hydration
-  document.addEventListener('astro:page-load', async () => {
-    const container = document.getElementById('movies-container');
-    const loading = document.getElementById('loading');
-    const noMovies = document.getElementById('no-movies');
-    const moviesWall = document.getElementById('movies-wall');
-    
-    // Type guard to ensure elements exist
-    if (!loading || !noMovies || !moviesWall) {
-      console.error('Required elements not found');
-      return;
-    }
-
-    try {
-      loading.style.display = 'block';
-      noMovies.style.display = 'none';
-      
-      // Re-fetch movies on the client side
-      const response = await fetch('/api/movies');
-      if (!response.ok) throw new Error('Failed to fetch movies');
-      
-      const data = await response.json();
-      const movies = data.results || [];
-      
-      if (movies.length === 0) {
-        noMovies.style.display = 'block';
-        moviesWall.style.display = 'none';
-      } else {
-        noMovies.style.display = 'none';
-        // Clear existing content
-        moviesWall.innerHTML = '';
-        // Add new movies
-        movies.forEach((movie) => {
-          const movieCard = document.createElement('div');
-          movieCard.className = 'movie-card';
-          
-          const ratingHtml = movie.vote_average ? `
-            <div class="rating">
-              ⭐ ${movie.vote_average.toFixed(1)}/10
-            </div>
-          ` : '';
-          
-          movieCard.innerHTML = `
-            ${movie.poster_path ? `
-              <img 
-                src="https://image.tmdb.org/t/p/w500${movie.poster_path}" 
-                alt="${movie.title}" 
-                loading="lazy"
-                width="300"
-                height="450"
-              />
-            ` : ''}
-            <div class="movie-info">
-              <h3>${movie.title}</h3>
-              ${ratingHtml}
-              <a 
-                href="https://www.themoviedb.org/movie/${movie.id}" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                class="view-movie"
-              >
-                View Details →
-              </a>
-            </div>
-          `;
-          moviesWall.appendChild(movieCard);
-        });
-      }
-    } catch (error) {
-      console.error('Error loading movies:', error);
-      if (noMovies) {
-        noMovies.innerHTML = '<p>Error loading movies. Please try again later.</p>';
-        noMovies.style.display = 'block';
-      }
-    } finally {
-      if (loading) loading.style.display = 'none';
-    }
-  });
-</script>
-
-<style>
-.movies-wall {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 2rem;
-  padding: 2rem 1.5rem;
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  justify-items: center;
-}
-
-.no-movies {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 3rem 1rem;
-  color: #888;
-  font-size: 1.1rem;
-}
-
-.movie-card {
-  background: rgba(20, 10, 10, 0.86);
-  border-radius: 12px;
-  box-shadow: 0 6px 32px 0 rgba(80,10,20,0.15), 0 1.5px 10px 0 rgba(127,29,29,0.11) inset;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
   width: 100%;
   max-width: 280px;
   transition: all 0.3s ease;
