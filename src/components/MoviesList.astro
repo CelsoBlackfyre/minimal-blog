@@ -2,6 +2,7 @@
 import type { Movie } from "../utils/fetch-movies";
 import { getMovies } from "../utils/fetch-movies";
 
+<<<<<<< HEAD
 const moviesResponse = await getMovies();
 const movies: Movie[] = moviesResponse.results;
 ---
@@ -42,8 +43,129 @@ const movies: Movie[] = moviesResponse.results;
     <div class="no-movies">
       <p>No movies found. Please try again later.</p>
     </div>
+=======
+interface Movie {
+  id: number;
+  title: string;
+  poster_path?: string;
+  [key: string]: any;
+}
+
+// Get initial data at build time
+const initialMovies: Movie[] = await getMovies();
+---
+
+<div id="movies-container">
+  <div id="loading" style="display: none;">Loading movies...</div>
+  
+  {initialMovies.length === 0 ? (
+    <div id="no-movies">
+      <p>No movies available at the moment. Please check back later.</p>
+    </div>
+  ) : (
+    <div id="movies-wall" class="movies-wall">
+      {initialMovies.map((movie) => (
+        <div class="movie-card">
+          {movie.poster_path && (
+            <img 
+              src={"https://image.tmdb.org/t/p/w500" + movie.poster_path} 
+              alt={movie.title} 
+              loading="lazy"
+            />
+          )}
+          <div class="movie-info">
+            <h3>{movie.title}</h3>
+            <a 
+              href={"https://www.themoviedb.org/movie/" + movie.id} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="view-movie"
+            >
+              View Movie →
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+>>>>>>> origin/master
   )}
 </div>
+
+<script>
+  // Define the Movie interface for TypeScript in the client-side script
+  interface Movie {
+    id: number;
+    title: string;
+    poster_path?: string;
+    [key: string]: any;
+  }
+
+  // Client-side hydration
+  document.addEventListener('astro:page-load', async () => {
+    const container = document.getElementById('movies-container');
+    const loading = document.getElementById('loading');
+    const noMovies = document.getElementById('no-movies');
+    const moviesWall = document.getElementById('movies-wall');
+    
+    // Type guard to ensure elements exist
+    if (!loading || !noMovies || !moviesWall) {
+      console.error('Required elements not found');
+      return;
+    }
+
+    try {
+      loading.style.display = 'block';
+      noMovies.style.display = 'none';
+      
+      // Re-fetch movies on the client side
+      const response = await fetch('/api/movies');
+      if (!response.ok) throw new Error('Failed to fetch movies');
+      
+      const movies: Movie[] = await response.json();
+      
+      if (movies.length === 0) {
+        noMovies.style.display = 'block';
+        moviesWall.style.display = 'none';
+      } else {
+        noMovies.style.display = 'none';
+        // Clear existing content
+        moviesWall.innerHTML = '';
+        // Add new movies
+        movies.forEach((movie) => {
+          const movieCard = document.createElement('div');
+          movieCard.className = 'movie-card';
+          movieCard.innerHTML = `
+            ${movie.poster_path ? `
+              <img 
+                src="https://image.tmdb.org/t/p/w500${movie.poster_path}" 
+                alt="${movie.title}" 
+                loading="lazy"
+              />
+            ` : ''}
+            <div class="movie-info">
+              <h3>${movie.title}</h3>
+              <a 
+                href="https://www.themoviedb.org/movie/${movie.id}" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="view-movie"
+              >
+                View Movie →
+              </a>
+            </div>
+          `;
+          moviesWall.appendChild(movieCard);
+        });
+      }
+    } catch (error) {
+      console.error('Error loading movies:', error);
+      noMovies.innerHTML = '<p>Error loading movies. Please try again later.</p>';
+      noMovies.style.display = 'block';
+    } finally {
+      loading.style.display = 'none';
+    }
+  });
+</script>
 
 <style>
 .movies-wall {

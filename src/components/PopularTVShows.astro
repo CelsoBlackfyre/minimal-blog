@@ -1,75 +1,55 @@
 ---
-// This component is client-side only
-// It will be hydrated on the client side
+// Server-side props
+interface Props {
+  tvshows?: Array<{
+    id: number;
+    name: string;
+    poster_path: string | null;
+    overview: string;
+    first_air_date: string;
+    vote_average: number;
+  }>;
+}
+
+const { tvshows = [] } = Astro.props;
+const popularTVShows = tvshows.slice(0, 6);
 ---
 
 <div id="popular-tv-shows" class="latest-popularTVShows-row">
-  <h2>Loading Popular TV Shows...</h2>
-  <div class="popularTVShows-cards-row" id="tv-shows-container">
-    <!-- Content will be populated by client-side JavaScript -->
+  <h2>Popular TV Shows</h2>
+  <div class="popularTVShows-cards-row">
+    {popularTVShows.length > 0 ? (
+      popularTVShows.map(tvshow => (
+        <div class="popularTVShows-card">
+          {tvshow.poster_path ? (
+            <img 
+              src={`https://image.tmdb.org/t/p/w500${tvshow.poster_path}`}
+              alt={tvshow.name}
+              loading="lazy"
+              width="150"
+              height="225"
+            />
+          ) : (
+            <div class="placeholder-poster">
+              <span>{tvshow.name}</span>
+            </div>
+          )}
+          <h3>{tvshow.name}</h3>
+          <a href={`https://www.themoviedb.org/tv/${tvshow.id}`} target="_blank" rel="noopener noreferrer">
+            View TV Show →
+          </a>
+        </div>
+      ))
+    ) : (
+      <p>No TV shows available at the moment.</p>
+    )}
   </div>
 </div>
 
+<!-- Client-side interactivity can be added here if needed -->
 <script>
-  // Wait for the DOM to be fully loaded
-  document.addEventListener('DOMContentLoaded', async () => {
-    const container = document.getElementById('tv-shows-container');
-    if (!container) return;
-
-    try {
-      // Fetch TV shows from our API
-      const response = await fetch('/api/tvshows');
-      if (!response.ok) {
-        throw new Error('Failed to fetch TV shows');
-      }
-      
-      const tvshows = await response.json();
-      const popularTVShows = Array.isArray(tvshows) ? tvshows.slice(0, 6) : [];
-      
-      // Clear loading message
-      container.innerHTML = '';
-      
-      // Add TV show cards to the container
-      popularTVShows.forEach(tvshow => {
-        const card = document.createElement('div');
-        card.className = 'popularTVShows-card';
-        
-        const img = tvshow.poster_path 
-          ? `<img 
-               src="https://image.tmdb.org/t/p/w500${tvshow.poster_path}" 
-               alt="${tvshow.name}"
-               loading="lazy"
-               width="150"
-               height="225"
-             />`
-          : `<div class="placeholder-poster">
-               <span>${tvshow.name}</span>
-             </div>`;
-        
-        card.innerHTML = `
-          ${img}
-          <h3>${tvshow.name}</h3>
-          <a href="https://www.themoviedb.org/tv/${tvshow.id}" target="_blank">View TV Show →</a>
-        `;
-        
-        container.appendChild(card);
-      });
-      
-      // Update the title to remove loading state
-      const title = document.querySelector('#popular-tv-shows h2');
-      if (title) {
-        title.textContent = 'Popular TV Shows';
-      }
-      
-    } catch (error) {
-      console.error('Error loading TV shows:', error);
-      container.innerHTML = `
-        <div class="error-message">
-          Failed to load TV shows. Please try again later.
-        </div>
-      `;
-    }
-  });
+  // Any client-side interactivity can be added here
+  // The component is now server-rendered with static data
 </script>
 
 <style>
