@@ -14,7 +14,7 @@ export default defineConfig({
   integrations: [mdx(), sitemap()],
   
   // For Vercel deployment with serverless functions
-  output: 'server',
+  output: 'static',
   adapter: vercel({
     webAnalytics: {
       enabled: true,
