@@ -19,7 +19,7 @@
   },
   "build": {
     "env": {
-      "TMDB_API_KEY": "@tmdb_api_key"
+      "TMDB_API_KEY": "3e3166a36a2077f3e58c3efe7058f9ee"
     }
   }
 }
