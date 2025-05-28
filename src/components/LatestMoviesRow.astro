@@ -1,7 +1,7 @@
 ---
 import { getMovies } from "../utils/fetch-movies";
 
-// Fetch movies on the server side
+// Fetch movies on the server side and pass them as props to the client-side component
 const recentMovies = (await getMovies()).results.slice(0, 6);
 ---
 
