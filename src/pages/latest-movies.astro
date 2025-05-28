@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/BlogPost.astro'
+import MoviesList from '../components/MoviesList.astro'
+import { getMovies } from '../utils/fetch-movies';
+
+// Fetch movies directly from TMDB
+let movies = [];
+try {
+  const data = await getMovies();
+  movies = data?.results || [];
+} catch (error) {
+  console.error('Failed to fetch movies:', error);
+}
+---
+
+<Layout
+  title="Latest Movies"
+  description="Latest movies from TMDB"
+  pubDate={new Date()}
+  category="Movies"
+>
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">Latest Movies</h1>
+    <MoviesList movies={movies} />
+  </div>
+</Layout>

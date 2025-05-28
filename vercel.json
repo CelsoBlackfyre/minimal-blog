@@ -1,12 +1,13 @@
 {
   "version": 2,
   "builds": [
-    { "src": "package.json", "use": "@vercel/node" }
+    { "src": "package.json", "use": "@vercel/static-build" },
+    { "src": "src/pages/api/**.ts", "use": "@vercel/node" }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "src": "/api/(?<path>.+)",
+      "dest": "/api/$path"
     },
     {
       "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot))",
@@ -16,7 +17,7 @@
       "dest": "/$1"
     },
     {
-      "src": "/(.*)",
+      "src": "^/(?!(api|_next/.*|.*\\..*$))",
       "dest": "/index.html"
     }
   ]
