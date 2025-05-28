@@ -39,7 +39,20 @@ export async function getMovies(page: number = 1, genre?: string): Promise<Movie
       throw new Error(error.message || 'Failed to fetch movies');
     }
 
-    return await response.json();
+    const data = await response.json();
+    
+    // Ensure the response matches the MoviesResponse interface
+    if (Array.isArray(data)) {
+      return {
+        results: data,
+        page: 1,
+        total_pages: 1,
+        total_results: data.length
+      };
+    }
+    
+    // If it's already in the correct format, return as is
+    return data;
   } catch (error) {
     console.error('Error fetching movies:', error);
     // Return empty results on error to prevent UI breakage
@@ -57,7 +70,6 @@ export async function getMovies(page: number = 1, genre?: string): Promise<Movie
  */
 export async function getMovieById(id: number): Promise<Movie | undefined> {
   try {
-    // We need to fetch all movies and filter by ID since TMDB's discover endpoint doesn't support direct ID lookup
     const response = await getMovies();
     return response.results.find(movie => movie.id === id);
   } catch (error) {
