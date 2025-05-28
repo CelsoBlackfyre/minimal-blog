@@ -1,14 +1,35 @@
 import type { APIRoute } from 'astro';
 
+// CORS headers
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
 export const GET: APIRoute = async ({ request }) => {
   try {
+    // Handle OPTIONS request for CORS preflight
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        status: 200,
+        headers: corsHeaders,
+      });
+    }
+
     // Verify API key is configured
-    const apiKey = import.meta.env.TMDB_API_KEY;
+    const apiKey = import.meta.env.TMDB_API_KEY || process.env.TMDB_API_KEY;
     if (!apiKey) {
       console.error('TMDB_API_KEY is not configured');
       return new Response(
         JSON.stringify({ error: 'Server configuration error' }),
-        { status: 500, headers: { 'Content-Type': 'application/json' } }
+        { 
+          status: 500, 
+          headers: { 
+            'Content-Type': 'application/json',
+            ...corsHeaders
+          } 
+        }
       );
     }
 
@@ -57,14 +78,16 @@ export const GET: APIRoute = async ({ request }) => {
       status: 200,
       headers: { 
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=3600' // Cache for 1 hour
+        'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
+        ...corsHeaders
       }
     });
     
   } catch (error) {
     console.error('Error in /api/movies:', {
       error,
-      message: error instanceof Error ? error.message : 'Unknown error'
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
     });
     
     return new Response(
@@ -73,7 +96,10 @@ export const GET: APIRoute = async ({ request }) => {
         message: error instanceof Error ? error.message : 'Unknown error'
       }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
       }
     );
   }

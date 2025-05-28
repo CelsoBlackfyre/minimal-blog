@@ -3,37 +3,65 @@ import type { Movie, MoviesResponse } from '../utils/fetch-movies';
 import { getMovies } from '../utils/fetch-movies';
 
 // Get initial data at build time
-const initialData = await getMovies();
-const initialMovies = initialData.results || [];
+let initialData: MoviesResponse;
+let error: string | null = null;
+let isLoading = true;
+
+try {
+  initialData = await getMovies();
+} catch (err) {
+  console.error('Error fetching initial movies:', err);
+  error = err instanceof Error ? err.message : 'Failed to load movies';
+} finally {
+  isLoading = false;
+}
+
+const initialMovies = initialData?.results || [];
 ---
 
 <div id="movies-container">
-  <div id="loading" style="display: none;">Loading movies, please wait...</div>
-  
-  {initialMovies.length === 0 ? (
-    <div id="no-movies">
+  {isLoading ? (
+    <div id="loading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading movies, please wait...</p>
+    </div>
+  ) : error ? (
+    <div id="error" class="error-state">
+      <p>⚠️ {error}</p>
+      <p>Please try refreshing the page or contact support if the issue persists.</p>
+    </div>
+  ) : initialMovies.length === 0 ? (
+    <div id="no-movies" class="empty-state">
       <p>No movies available at the moment. Please check back later.</p>
     </div>
   ) : (
     <div id="movies-wall" class="movies-wall">
       {initialMovies.map((movie) => (
         <div class="movie-card">
-          {movie.poster_path && (
+          {movie.poster_path ? (
             <img 
               src={"https://image.tmdb.org/t/p/w500" + movie.poster_path} 
               alt={movie.title} 
               loading="lazy"
               width="300"
               height="450"
+              onError={(e) => {
+                // Fallback to a placeholder if image fails to load
+                e.currentTarget.src = 'https://via.placeholder.com/300x450?text=No+Poster';
+              }}
             />
+          ) : (
+            <div class="no-poster">
+              <span>No poster available</span>
+            </div>
           )}
           <div class="movie-info">
             <h3>{movie.title}</h3>
-            {movie.vote_average && (
+            {movie.vote_average ? (
               <div class="rating">
                 ⭐ {movie.vote_average.toFixed(1)}/10
               </div>
-            )}
+            ) : null}
             <a 
               href={"https://www.themoviedb.org/movie/" + movie.id} 
               target="_blank" 
@@ -48,6 +76,48 @@ const initialMovies = initialData.results || [];
     </div>
   )}
 </div>
+
+<style>
+  .loading-state,
+  .error-state,
+  .empty-state {
+    text-align: center;
+    padding: 2rem;
+    margin: 2rem 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .no-poster {
+    width: 300px;
+    height: 450px;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+  }
+</style>
 
 <script>
   // Client-side hydration

@@ -15,22 +15,34 @@ export interface MoviesResponse {
   total_results: number;
 }
 
+// Helper function to get the base URL based on the environment
+function getBaseUrl() {
+  // Client-side: use relative URL
+  if (typeof window !== 'undefined') return '';
+  
+  // Server-side: construct absolute URL
+  // Vercel provides VERCEL_URL for serverless functions
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  
+  // Fallback for local development
+  return 'http://localhost:4321';
+}
+
 export async function getMovies(page: number = 1, genre?: string): Promise<MoviesResponse> {
   try {
-    let endpoint = `/api/movies?page=${page}`;
-    if (genre) endpoint += `&with_genres=${encodeURIComponent(genre)}`;
-
-    let fetchUrl = endpoint;
-
-    // SSR (Node): must use absolute URL
-    if (typeof window === 'undefined') {
-      // On Vercel: prefer process.env.URL or process.env.VERCEL_URL (set this in Vercel Env Vars)
-      const base =
-        process.env.URL ||
-        (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:4321');
-      fetchUrl = base + endpoint;
-    }
-
+    // Build the endpoint with query parameters
+    const params = new URLSearchParams();
+    params.set('page', page.toString());
+    if (genre) params.set('with_genres', genre);
+    
+    const endpoint = `/api/movies?${params.toString()}`;
+    const baseUrl = getBaseUrl();
+    const fetchUrl = `${baseUrl}${endpoint}`;
+    
+    console.log('Fetching movies from:', fetchUrl);
+    
     const response = await fetch(fetchUrl, {
       headers: {
         'Content-Type': 'application/json',
@@ -38,12 +50,18 @@ export async function getMovies(page: number = 1, genre?: string): Promise<Movie
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({}));
-      throw new Error(error.message || 'Failed to fetch movies');
+      const errorText = await response.text();
+      console.error('Failed to fetch movies:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: fetchUrl,
+        error: errorText
+      });
+      throw new Error(`Failed to fetch movies: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
-    // Enforce MoviesResponse structure
+    // Ensure the response matches our MoviesResponse interface
     if (Array.isArray(data)) {
       return {
         results: data,
