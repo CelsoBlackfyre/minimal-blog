@@ -1,6 +1,6 @@
 ---
 title: "Videogames"
-description: "Lorem ipsum dolor sit amet"
+description: "Introduction to video games"
 pubDate: "May 15 2025"
 heroImage: "/ada2.jpeg"
 category: "Games"

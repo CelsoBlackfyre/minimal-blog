@@ -1,0 +1,233 @@
+---
+const { name, role, quote, image, title } = Astro.props
+---
+
+<section>
+  <h1 class="trending-title">Trending</h1>
+  <div class="trending-row">
+    <div class="trending-card">
+      <div class="trending-content">
+        <img src="/trending2.png" alt="trending" class="trending-img" />
+        <div class="smoke-overlay"></div>
+        <div class="info-box">
+          <div class="trending-name">RESIDENT EVIL <span class="red-number">4</span></div>
+          <div class="trending-role">9.5</div>
+          <div class="trending-quote">"Where's everyone going"<br />Bingo?</div>
+        </div>
+        <div class="resident-evil-4-title">REVIEW</div>
+      </div>
+    </div>
+
+    <div class="trending-card">
+      <div class="trending-content">
+        <img src="asuka-review.png" alt="trending" class="trending-img" />
+        <div class="smoke-overlay"></div>
+        <div class="info-box">
+          <div class="trending-name">EVANGELION</div>
+          <div class="trending-role">10</div>
+          <div class="trending-quote">"One who truly hates himself<br />cannot love"</div>
+        </div>
+        <div class="resident-evil-4-title">REVIEW</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  body {
+  background: #121212;
+  font-family: 'Georgia', serif;
+  color: #e0e0e0;
+}
+
+.trending-title {
+  margin-top: 3rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-align: center;
+  color: #e0cfaf;
+  text-shadow: 0 2px 8px #000, 0 1px 1px #7f1d1d;
+}
+
+.trending-row {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.trending-card {
+  width: 520px;
+  height: 210px;
+  min-width: 260px;
+  max-width: 99vw;
+  margin: 0 0 36px 0;
+  background: rgba(24, 17, 20, 0.98);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  position: relative;
+  border: 2px solid #7f1d1dcc; /* strong red accent */
+  box-shadow: 0 4px 30px 0 #180c13ee;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: box-shadow 0.22s, transform 0.22s;
+}
+.trending-card:hover {
+  box-shadow: 0 8px 40px #7f1d1d77, 0 2px 24px #180c13ee;
+  transform: translateY(-4px) scale(1.02);
+}
+
+.trending-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  padding: 0;
+}
+
+.trending-img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 175px;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  opacity: 0.99;
+  pointer-events: none;
+  border-radius: 18px 0 0 18px;
+  filter: grayscale(20%) brightness(0.97) contrast(1.16);
+}
+
+.smoke-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;         /* covers the full card width */
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  background: url('/smoke.png') center/cover no-repeat;
+  opacity: 0.25;       /* adjust for your desired smokiness */
+  mix-blend-mode: lighten;
+  border-radius: 18px; /* match the card's radius for seamless edges */
+}
+
+
+.info-box {
+  position: relative;
+  z-index: 3;
+  color: #e0cfaf;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.15rem 2rem 1.15rem 200px; /* Large left pad for image */
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  gap: 0.27em;
+}
+
+.trending-name {
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: 2.7px;
+  color: #f7e7c5;
+  text-shadow: 0 2px 12px #0d060a, 0 1px 1px #7f1d1d55;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.red-number {
+  color: #7f1d1d;
+  font-size: 1.52rem;
+  font-weight: 900;
+  margin-left: 0.1em;
+  letter-spacing: 1.2px;
+  text-shadow: 0 2px 13px #7f1d1d44, 0 1px 2px #000;
+}
+
+.trending-role {
+  font-size: 1.85rem;
+  color: #edc988;
+  font-weight: bold;
+  margin: 0.25rem 0 0.20rem 0;
+}
+
+.trending-quote {
+  font-size: 1.15rem;
+  color: #cbbba1;
+  font-style: italic;
+  border-left: 3px solid #7f1d1da0;
+  padding-left: 1.1rem;
+  margin-top: 0.16rem;
+  line-height: 1.23;
+  white-space: pre-line;
+  text-shadow: 0 1px 3px #1c1015;
+}
+
+.resident-evil-4-title {
+  position: absolute;
+  right: 1.8rem;
+  bottom: 1.2rem;
+  font-size: 1.27rem;
+  line-height: 1.18;
+  color: #edc988;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  z-index: 4;
+  opacity: 0.91;
+  text-shadow: 0 2px 12px #1c1015, 0 1px 2px #7f1d1d33;
+  pointer-events: none;
+}
+
+@media (max-width: 1150px) {
+  .trending-row {
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: center;
+  }
+  .trending-card {
+    width: 98vw;
+    max-width: 99vw;
+    min-width: 200px;
+    height: 220px;
+    margin: 0 0 22px 0;
+  }
+  .info-box {
+    padding: 0.9rem 1rem 0.9rem 150px;
+  }
+  .trending-img,
+  .smoke-overlay {
+    width: 150px;
+  }
+}
+
+@media (max-width: 700px) {
+  .trending-card {
+    width: 99vw;
+    min-width: 120px;
+    height: 180px;
+    border-radius: 12px;
+  }
+  .info-box {
+    padding: 0.6rem 0.3rem 0.6rem 95px;
+  }
+  .trending-img,
+  .smoke-overlay {
+    width: 90px;
+    border-radius: 12px 0 0 12px;
+  }
+  .trending-name { font-size: 1.1rem; }
+  .trending-role { font-size: 1.28rem; }
+  .resident-evil-4-title { font-size: 0.97rem; right: 0.9rem; }
+}
+
+</style>

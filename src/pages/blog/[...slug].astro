@@ -2,6 +2,7 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 import { render } from 'astro:content';
+import BackToTop from '@/components/BackToTop.astro';
 export const prerender = true;
 
 // Get all posts for static paths
@@ -25,4 +26,5 @@ const { Content } = await render(post);
 
 <BlogPost {...post.data}>
 	<Content />
+			<BackToTop />
 </BlogPost>

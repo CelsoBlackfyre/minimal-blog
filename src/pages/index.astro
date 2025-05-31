@@ -1,8 +1,11 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import BaseHead from '../components/BaseHead.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
+import BackToTop from '@/components/BackToTop.astro'
+import Trending from '@/components/Trending.astro'
+
 ---
 
 <!doctype html>
@@ -12,29 +15,31 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
   </head>
   <body>
     <Header />
+    <section>
+      <Trending />
+    </section>
     <main>
       <h1>🐉 Hello, Legionnaire!</h1>
       <img src="/asuka5.png" alt="Asuka Welcome" />
       <p>
-        Welcome to the official blog of the Blackfyre Legion! Our Codex have
-        information about our members and of course related to our Imperator,
-        Blackfyre himself. Feel free to enjoy our posts, may that be written by
-        Blackfyre or pulled with our agreggator.
+        Welcome to the official blog of the Blackfyre Legion! Our Codex have information about our
+        members and of course related to our Imperator, Blackfyre himself. Feel free to enjoy our
+        posts, may that be written by Blackfyre or pulled with our agreggator.
       </p>
       <p>
-        The blog posessess a lot of opinions, fanboyolism, nerdy, autistic and
-        weird stuff. Here I don't hold back on my feelings on the subject in
-        question no matter what it is. I try to not offend anyone, of course I
-        will not atack a person, game, series, movies or anything with no
+        The blog posessess a lot of opinions, fanboyolism, nerdy, autistic and weird stuff. Here I
+        don't hold back on my feelings on the subject in question no matter what it is. I try to not
+        offend anyone, of course I will not atack a person, game, series, movies or anything with no
         reason.
       </p>
-      
-     <p>
+
+      <p>
         You wanna know more info about how this blog was made? Check out
         <a href="https://github.com/CelsoBlackfyre/">Minimal Blog</a>
         by <a href="https://twitter.com/EmpBlackfyre">Imperator Blackfyre</a>.
       </p>
     </main>
+    <BackToTop />
     <Footer />
   </body>
 </html>

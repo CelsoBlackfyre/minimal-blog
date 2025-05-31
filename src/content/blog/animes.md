@@ -6,8 +6,6 @@ heroImage: "/asuka.png"
 category: "Animes"
 ---
 
----
-
 ## Blackfyre is Introduced to Animes
 
 The first anime that I watched was probably Yu-Gi-Oh! After that, I got into Dragon Ball, initially hating it. Then, when I grew up, I switched to Zatch Bell!, Naruto, and more...  

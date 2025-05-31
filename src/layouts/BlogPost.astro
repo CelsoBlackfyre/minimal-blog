@@ -6,6 +6,7 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import LatestMoviesRow from '../components/LatestMoviesRow.astro';
 import PopularTVShows from '../components/PopularTVShows.astro';
+import BackToTop from '@/components/BackToTop.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
@@ -86,8 +87,6 @@ const sampleTVShows = [
 
 	<body>
 		<Header />
-		{category === "Movies" && <LatestMoviesRow />}
-		{category === "TV Shows" && <PopularTVShows tvshows={sampleTVShows} />}
 		<main class="main-container">
 			<article>
 				<div class="hero-image">
@@ -112,7 +111,6 @@ const sampleTVShows = [
 				</div>
 			</article>
 		</main>
-		
 		<Footer />
 		
 	</body>
