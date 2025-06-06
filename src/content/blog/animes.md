@@ -1,6 +1,6 @@
 ---
 title: "Animes"
-description: "Lorem ipsum dolor sit amet"
+description: "My introduction to animes"
 pubDate: "May 15 2025"
 heroImage: "/asuka.png"
 category: "Animes"

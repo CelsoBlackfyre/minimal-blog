@@ -4,6 +4,7 @@ const { name, role, quote, image, title } = Astro.props
 
 <section>
   <h1 class="trending-title">Trending</h1>
+  <a href="/blog/resident-evil-4" class="trending-link">
   <div class="trending-row">
     <div class="trending-card">
       <div class="trending-content">
@@ -17,7 +18,8 @@ const { name, role, quote, image, title } = Astro.props
         <div class="resident-evil-4-title">REVIEW</div>
       </div>
     </div>
-
+</a>
+    <a href="/blog/evangelion" class="trending-link">
     <div class="trending-card">
       <div class="trending-content">
         <img src="asuka-review.png" alt="trending" class="trending-img" />
@@ -31,6 +33,7 @@ const { name, role, quote, image, title } = Astro.props
       </div>
     </div>
   </div>
+  </a>
 </section>
 
 <style>
@@ -41,8 +44,9 @@ const { name, role, quote, image, title } = Astro.props
 }
 
 .trending-title {
-  margin-top: 3rem;
-  font-size: 2.5rem;
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+  font-size: 3.5rem;
   font-weight: 700;
   letter-spacing: 2.5px;
   text-align: center;
@@ -55,7 +59,7 @@ const { name, role, quote, image, title } = Astro.props
   flex-direction: row;
   gap: 1.5rem;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .trending-card {
@@ -186,6 +190,21 @@ const { name, role, quote, image, title } = Astro.props
   opacity: 0.91;
   text-shadow: 0 2px 12px #1c1015, 0 1px 2px #7f1d1d33;
   pointer-events: none;
+}
+
+.trending-link {
+  text-decoration: none;
+  display: block;
+  width: fit-content;
+}
+
+.trending-link:focus {
+  outline: none;
+}
+
+.trending-link:hover .trending-name {
+  color: #f7e7c5;
+  text-shadow: 0 2px 12px #0d060a, 0 1px 1px #7f1d1d55;
 }
 
 @media (max-width: 1150px) {
