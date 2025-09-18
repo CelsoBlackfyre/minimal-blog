@@ -7,9 +7,7 @@ import vercel from '@astrojs/vercel'
 // https://astro.build/config
 export default defineConfig({
   // This will be overridden by the VERCEL_URL environment variable in production
-  site: process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:4321',
+  site: process.env.SITE_URL ?? 'https://blackfyre-codex.xyz',
 
   integrations: [mdx(), sitemap()],
 
