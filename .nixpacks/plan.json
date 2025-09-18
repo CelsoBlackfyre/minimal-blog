@@ -1,17 +1,16 @@
 {
   "providers": ["node"],
   "variables": {
-    "NODE_ENV": "production",
-    "NPM_CONFIG_PRODUCTION": "true"
+    "NODE_ENV": "production"
   },
   "phases": {
     "setup": {
-      "nixPkgs": ["nodejs_18", "npm"],
+      "nixPkgs": ["nodejs_18"],
       "nixLibs": []
     },
     "install": {
       "cmds": [
-        "npm ci --only=production"
+        "npm ci"
       ]
     },
     "build": {
