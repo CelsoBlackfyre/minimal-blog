@@ -1,10 +1,11 @@
 ---
-title: "TV Shows & Series"
-description: "Introduction to TV Shows and Series"
-pubDate: "May 15 2025"
-heroImage: "/peacemaker.jpg"
-category: "TV Shows"
+title: 'TV Shows & Series'
+description: 'Introduction to TV Shows and Series'
+pubDate: 'May 15 2025'
+heroImage: '/peacemaker.jpg'
+category: 'TV Shows'
 ---
+
 ## Blackfyre is Introduced to TV Shows and Series
 
 I can't remember what was the first series that I watched. It definitely wasn't something heavy — probably some kid show that was on TV, like Chaves, My Wife and Kids, Everybody Hates Chris, The Simpsons, Drake & Josh, iCarly, and Power Rangers.
@@ -22,5 +23,3 @@ I hope I can cover all the stuff that I like, and that the reader can have a goo
 Please, if you waste your time reading my posts, don't get mad at any of them. Each person has a different opinion and a way to see things. I just hope I can share mine and discuss with other people, enjoying the best of all things and discovering some new shows that someone didn't watch simply because they had never heard of it, or just didn't think it was worth their time.
 
 Enjoy the ride!
-
-<BackToTop />

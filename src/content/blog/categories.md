@@ -6,6 +6,8 @@ heroImage: /ada.png
 category: General
 ---
 
+![[Untitled 1.base]]
+
 This blog is written with passion and as a way for me to learn and apply what I am learning as a developer. The posts are divided into categories, such as games, movies, TV shows, anime, sports, and maybe something different from those, like general stuff.
 
 ## Welcome to the Codex
@@ -29,4 +31,3 @@ The blog has its categories. You can choose to navigate by them or by individual
 **TV Shows**: Same thing as movies — I used to watch a lot and now less. Many series are unfinished, and the ones I finished I really liked. So I should probably talk about them, right? Anyway, I'll separate the posts by season if the series is unfinished or has unreleased seasons or something like that.
 
 **Sports**: I would be lying if I said that I'm a sports guy. I only like Football (the real one, not the American version) and F1, to be honest. I follow Atlético Mineiro and Chelsea when it comes to football, and Max Verstappen when it comes to F1. I don't have much to talk about, but I will.
-
