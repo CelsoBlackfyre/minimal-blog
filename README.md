@@ -13,8 +13,6 @@
 
 ## 📚 Features
 
-- **Content Creator Reviews:** Detailed profiles and reviews of digital creators across platforms (YouTube, OnlyFans, Fansly, Twitch, etc.).
-- **Character Codex:** Original characters, lore, and military-themed narratives crafted by the Imperator.
 - **Tech Guides:** Practical tips on Linux, gaming setups, programming, and digital productivity.
 - **Game Reviews:** Focused, honest takes on cult classics and hidden gems.
 
