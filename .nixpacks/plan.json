@@ -1,0 +1,26 @@
+{
+  "providers": ["node"],
+  "variables": {
+    "NODE_ENV": "production",
+    "NPM_CONFIG_PRODUCTION": "true"
+  },
+  "phases": {
+    "setup": {
+      "nixPkgs": ["nodejs_18", "npm"],
+      "nixLibs": []
+    },
+    "install": {
+      "cmds": [
+        "npm ci --only=production"
+      ]
+    },
+    "build": {
+      "cmds": [
+        "npm run build"
+      ]
+    }
+  },
+  "start": {
+    "cmd": "npx serve -s dist -l 4321"
+  }
+}
