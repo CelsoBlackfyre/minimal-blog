@@ -1,18 +1,20 @@
 ---
-import HeaderLink from "./HeaderLink.astro";
-import { SITE_TITLE } from "../consts";
+import HeaderLink from './HeaderLink.astro'
+import { SITE_TITLE } from '../consts'
 ---
 
 <header>
   <nav>
     <h2>
-      <img 
-        src="/logo.png" 
+      <img
+        src="/logo.png"
         alt="Blackfyre Sigil"
-        width="36" height="36"
+        width="36"
+        height="36"
         style="display: inline-block; vertical-align: middle;"
       />
-      <a href="/">{SITE_TITLE}</a></h2>
+      <a href="/">{SITE_TITLE}</a>
+    </h2>
     <div class="internal-links">
       <HeaderLink href="/">Home</HeaderLink>
       <HeaderLink href="/blog">Blog</HeaderLink>
@@ -28,7 +30,7 @@ import { SITE_TITLE } from "../consts";
           ></path></svg
         >
       </a>
-      <a href="https://twitter.com/EmpBlackfyre" target="_blank">
+      <a href="https://twitter.com/ImperatorBlackfyre" target="_blank">
         <span class="sr-only">Follow Blackfyre on Twitter</span>
         <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
           ><path
@@ -77,7 +79,7 @@ import { SITE_TITLE } from "../consts";
     text-shadow: 0 0 10px #f87171;
   }
   nav a:after {
-    content: "";
+    content: '';
     border-bottom: -25px;
     height: 0px;
     width: 10px;

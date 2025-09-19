@@ -28,4 +28,5 @@ COPY --from=builder /app/dist ./dist
 EXPOSE 4321
 
 # Start the static file server
-CMD ["serve", "-s", "dist", "-l", "4321"]
+CMD ["serve", "dist", "-l", "4321"]
+
