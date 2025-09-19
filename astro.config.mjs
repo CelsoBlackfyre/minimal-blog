@@ -8,6 +8,8 @@ import node from '@astrojs/node'
 export default defineConfig({
   site: process.env.SITE_URL ?? 'https://blackfyre-codex.xyz',
   output: 'server',
-  adapter: node({ mode: 'standalone' }),
+  adapter: node({
+    mode: 'standalone',
+  }),
   integrations: [mdx(), sitemap()],
 })

@@ -1,5 +1,6 @@
 [variables]
 NODE_ENV = "production"
+PORT = "4321"
 
 [phases.install]
 cmds = ["npm install"]
