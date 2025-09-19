@@ -6,7 +6,7 @@ heroImage: /ada.png
 category: General
 ---
 
-![[Untitled 1.base]]
+## Introduction
 
 This blog is written with passion and as a way for me to learn and apply what I am learning as a developer. The posts are divided into categories, such as games, movies, TV shows, anime, sports, and maybe something different from those, like general stuff.
 
